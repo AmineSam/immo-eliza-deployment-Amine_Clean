@@ -8,7 +8,7 @@ Production-ready Streamlit application for Belgian real estate price prediction 
 
 ## 📋 Overview
 
-This is a clean, minimal ML inference application that provides accurate price predictions for Belgian properties (houses and apartments). It uses dual specialized XGBoost models with confidence intervals, PDF report generation, and a modern dark/light mode UI.
+This is a clean, ML inference application that provides accurate price predictions for Belgian properties (houses and apartments). It uses dual specialized XGBoost models with confidence intervals, PDF report generation, and a modern dark/light mode UI.
 
 ### Key Features
 
@@ -85,7 +85,6 @@ immo-eliza-deployment-Amine_Clean/
 ├── utils/
 │   └── stage3_utils.py              # Stage 3 preprocessing
 │
-├── test_predictions.py              # Behavioral equivalence test
 ├── requirements.txt                 # Python dependencies
 └── README.md                        # This file
 ```
@@ -145,57 +144,6 @@ The models use 25 engineered features including:
 
 ---
 
-## 🧪 Testing
-
-### Behavioral Equivalence Test
-
-The repository includes a test script to verify prediction consistency:
-
-```bash
-# Capture golden outputs (baseline)
-python test_predictions.py --capture
-
-# Validate against golden outputs
-python test_predictions.py --validate
-```
-
-**Test Coverage**:
-- House prediction (Brussels villa)
-- Apartment prediction (Antwerp)
-- House prediction (Ghent residence)
-
-**Success Criteria**: All predictions must match within €1 tolerance.
-
----
-
-## ☁️ Deployment
-
-### Streamlit Cloud
-
-1. Push code to GitHub
-2. Go to [Streamlit Cloud](https://streamlit.io/cloud)
-3. Connect your repository
-4. Deploy `app/streamlit_app.py`
-
-**Environment Variables**: None required (all paths are relative)
-
-### Local Docker (Optional)
-
-```bash
-# Create Dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["streamlit", "run", "app/streamlit_app.py", "--server.port=8501"]
-
-# Build and run
-docker build -t immo-eliza .
-docker run -p 8501:8501 immo-eliza
-```
-
----
 
 ## 🔧 Technical Details
 
@@ -221,23 +169,6 @@ Confidence Interval (±16.7% for houses, ±9% for apartments)
 Display Result + PDF Generation
 ```
 
-### Path Resolution
-
-Uses explicit `pathlib.Path` for robust path resolution:
-
-```python
-from pathlib import Path
-
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-model_path = PROJECT_ROOT / "models" / "model_xgb_house.pkl"
-```
-
-**Benefits**:
-- Works identically locally and on Streamlit Cloud
-- No fragile `os.path.dirname(__file__)` chains
-- Cross-platform compatible
-
----
 
 ## 📦 Dependencies
 
